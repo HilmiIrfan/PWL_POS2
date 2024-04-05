@@ -91,12 +91,14 @@ class UserController extends Controller
             'title'=>'Edit user'
         ];
         $activeMenu='user';
-        return view('user.edit',['breadcrumb'=>$breadcrumb,'page'=>$page,'User'=>$user,'level'=>$level,'activeMenu'=>$activeMenu]);
+        return view('user.edit',['breadcrumb'=>$breadcrumb,'page'=>$page,
+            'User'=>$user,'level'=>$level,'activeMenu'=>$activeMenu]);
     }
     
     public function update(Request $request, string $id){
         $request->validate([
-            'username'=>'required|string|min:3|unique:m_user,username,'.$id.',User_id',
+            'username'=>'required|string|min:3|unique:m_user,
+                username,'.$id.',User_id',
             'nama'=>'required|string|max:100',
             'password'=>'nullable||min:5',
             'level_id'=>'required|integer'
@@ -104,9 +106,11 @@ class UserController extends Controller
         UserModel::find($id)->update([
             'username'=>$request->username,
             'nama'=>$request->nama,
-            'password'=>$request->password?bcrypt($request->password):UserModel::find($id)->password,
+            'password'=>$request->password?bcrypt($request->password):
+                UserModel::find($id)->password,
             'level_id'=>$request->level_id,
         ]);
-        return redirect('/user')->with('success','Data user berhasil diubah');
+        return redirect('/user')->with('success','Data user 
+            berhasil diubah');
     }
 }
