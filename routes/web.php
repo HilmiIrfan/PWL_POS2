@@ -29,3 +29,14 @@ Route::group(['prefix'=>'user'], function(){
     Route::get('/{id}',[UserController::class,'update']);
     Route::get('/{id}',[UserController::class,'destroy']);
 });
+
+Route::group(['prefix'=>'kategori'], function(){
+    Route::get('/',[KategoriController::class,'index']);
+    Route::get('/list',[KategoriController::class,'list']);
+    Route::get('/create',[KategoriController::class,'create']);
+    Route::get('/',[KategoriController::class,'store']);
+    Route::get('/{id}',[KategoriController::class,'show']);
+    Route::get('/{id}/edit',[KategoriController::class,'edit']);
+    Route::get('/{id}',[KategoriController::class,'update']);
+    Route::get('/{id}',[KategoriController::class,'destroy']);
+});

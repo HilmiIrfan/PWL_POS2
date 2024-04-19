@@ -1,21 +1,58 @@
-@extends('layout.app')
-
-{{--Customize layout sections--}}
-@section('subtitle', 'Kategori')
-@section('content_header_title', 'Home')
-@section('content_header_subtitle', 'Kategori')
-
+@extends('layout.template')
 @section('content')
-    <div class="container">
-        <div class="card">
-            <div class="card-header">Manage Kategori</div>
-            <div class="card-body">
-                {{$dataTable->table()}}
+    <div class="card card-outline card-primary">
+        <div class="card-header">
+            <h3 class="card-title">{{ $page->title}}</h3>
+            <div class="card-tools">
+                <a class="btn btn-sm btn-primary mt-1" href="{{ url('user/create') }}">Tambah</a>
             </div>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered table striped table-hover table-sm" id="table_kategori">
+                <thead>
+                    <tr><th>ID Kategori</th></tr><tr><th>Kode Kategori</th></tr><tr><th>Nama Kategori</th></tr><tr><th>Aksi</th></tr>
+                </thead>
+            </table>
         </div>
     </div>
 @endsection
 
-@push('scripts')
-    {{$dataTable->scripts()}}
+@push('css')
+@endpush
+@push('js')
+    <script>
+        $(document).ready(function(){
+            var dataKategori=$('#table_kategori').DataTable({
+                serverSide:true,
+                ajax:{
+                    "url":"{{ url('kategori/list') }}",
+                    "dataType":"json",
+                    "type":"POST"
+                },
+                columns:[
+                    {
+                        data:"DT_RowIndex",
+                        className:"text-center",
+                        orderable:false,
+                        searchable:false
+                    },{
+                        data:"kategori_kode",
+                        className:"",
+                        orderable:true,
+                        searchable:true
+                    },{
+                        data:"kategori_nama",
+                        className:"",
+                        orderable:true,
+                        searchable:true
+                    },{
+                        data:"aksi",
+                        className:"",
+                        orderable:false,
+                        searchable:false
+                    }
+                ]
+            })
+        })
+    </script>
 @endpush

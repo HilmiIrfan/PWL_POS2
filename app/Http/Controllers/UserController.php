@@ -18,11 +18,15 @@ class UserController extends Controller
             'title'=>'Daftar user yang terdaftar dalam sistem'
         ];
         $activeMenu='user';
-        return view('user.index',['breadcrumb'=>$breadcrumb,'page'=>$page,'activeMenu'=>$activeMenu]);
+        $level=LevelModel::all();
+        return view('user.index',['breadcrumb'=>$breadcrumb,'page'=>$page,'level'=>$level,'activeMenu'=>$activeMenu]);
     }
 
     public function list(Request $request){
         $users=UserModel::select('user_id','username','nama','level_id')->with('level');
+        if ($request->level_id) {
+            $users->where('level_id', $request->level_id);
+        }
         return DataTables::of($users)
             ->addIndexColumn()
             ->addColumn('aksi',function($user){
@@ -112,5 +116,19 @@ class UserController extends Controller
         ]);
         return redirect('/user')->with('success','Data user 
             berhasil diubah');
+    }
+
+    public function destroy(string $id){
+        $check=UserModel::find($id);
+        if (!$check) {
+            return redirect('/user')->with('error', 'Data user tidak ditemukan');
+        }
+        try {
+            UserModel::destroy($id);
+
+            return redirect('/user')->with('success', 'Data user berhasil dihapus');
+        } catch (\Illuminate\Database\QueryException $e) {
+            return redirect('/user')->with('error', 'Data user gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+        }
     }
 }
